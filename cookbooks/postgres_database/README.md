@@ -1,4 +1,4 @@
 # postgres_database
 
-TODO: Enter the cookbook description here.
+This cookbook is meant to install the PostgreSQL database into an Ubuntu 16.04 instance.
 
