@@ -43,3 +43,12 @@ Once you have performed the [Configuring your workstation to connect to the Chef
 knife cookbooks upload postgres_datase
 ```
 You should get the success message: *Created postgres_database*
+
+### Testing a cookbook
+
+To test a cookbook, you need to change directory into the cookbook and run the test command as shown below:
+
+```
+cd postgres_database
+chef exec rspec
+```
