@@ -1,0 +1,7 @@
+hostname="Provide a hostname that can be used to access your chef server over the internet and authenticate with knife"
+project="Provide your GCP project id"
+chef_server_zone="Provide the GCP zone you'd like to create your chef server on."
+chef_server_name="Provide the name you'd like your chef server instance to be called. Name needs to be unique"
+chef_ip_address="Provide the IP address you reserved for your chef server instance"
+region="Provide the region where you created you GCP project bucket"
+machine_type="Provide the machine type for you chef server instance. Note this should be n1-standard-1 and above"
