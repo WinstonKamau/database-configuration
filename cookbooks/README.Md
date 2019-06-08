@@ -23,3 +23,14 @@ The check command will confirm if the certificate that has been fetched is valid
 
 You should not get any errors with the commands above but success or warning messages.
 If the commands work, your workstation is now connected to your chef infra server.
+
+### Uploading a cookbook to the Chef Server
+
+Once you have performed the [Configuring your workstation to connect to the Chef Server](#configuring-your-workstation-to-connect-to-the-Chef-Server) step you can upload a cookbook to your chef server.
+
+1. Ensure that you are on the cookbooks directory before running the command below.
+
+```
+knife cookbooks upload postgres_datase
+```
+You should get the success message: *Created postgres_database*
