@@ -8,9 +8,9 @@
 # First step to setting up postgres is updating the apt cache
 
 apt_update 'Update the apt cache on chef client runs' do
-    action :update
-  end
-  
+  action :update
+end
+
 package 'wget'
 package 'ca-certificates'
 
@@ -20,11 +20,11 @@ execute 'Import the repository signing key' do
 end
 
 file '/etc/apt/sources.list.d/pgdg.list' do
-  content 'deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main'
+  content 'deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main'
 end
 
 apt_update 'Update the package lists' do
-  action :update
+  action :update
 end
 
 # Install core database server postgresql version 10
