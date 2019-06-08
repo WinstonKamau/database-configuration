@@ -9,7 +9,16 @@ cd cookbooks
 export HOSTNAME="The domain name that is pointing to your chef server"
 ```
 
-3. Once this is done you can run the commands below to create a connection:
+3. Fetch the contens of the chefadmin.pem file on your server instance.
+
+This step requires you to ssh into your running server. You can find more instructions [here](https://cloud.google.com/compute/docs/instances/connecting-to-instance).
+![SSH-into-instance](../docs/images/ssh-into-instance.png)
+Move into the /drop directory, and copy the contents of the chefadmin.pem
+![Get-Chefadmine-PEM-file](../docs/images/get-chefadmin-pem-file.png)
+Copy the contents you find here to the chefadmin.pem file located under the .chef folder.
+The contents fo the file change every time a new chef server instance is created.
+
+4. Once this is done you can run the commands below to create a connection:
 
 ```
 knife ssl fetch
