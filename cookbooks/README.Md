@@ -9,7 +9,7 @@ cd cookbooks
 export HOSTNAME="The domain name that is pointing to your chef server"
 ```
 
-3. Fetch the contens of the chefadmin.pem file on your server instance.
+3. Fetch the contents of the chefadmin.pem file on your server instance.
 
 This step requires you to ssh into your running server. You can find more instructions [here](https://cloud.google.com/compute/docs/instances/connecting-to-instance).
 ![SSH-into-instance](../docs/images/ssh-into-instance.png)
@@ -40,7 +40,7 @@ Once you have performed the [Configuring your workstation to connect to the Chef
 1. Ensure that you are on the cookbooks directory before running the command below.
 
 ```
-knife cookbooks upload postgres_datase
+knife cookbooks upload postgres_database
 ```
 You should get the success message: *Created postgres_database*
 
