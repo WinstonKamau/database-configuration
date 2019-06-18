@@ -40,7 +40,7 @@ Once you have performed the [Configuring your workstation to connect to the Chef
 1. Ensure that you are on the cookbooks directory before running the command below.
 
 ```
-knife cookbooks upload postgres_database
+knife cookbook upload postgres_database
 ```
 You should get the success message: *Created postgres_database*
 
@@ -52,3 +52,13 @@ To test a cookbook, you need to change directory into the cookbook and run the t
 cd postgres_database
 chef exec rspec
 ```
+
+### Bootstrap a node with the postgres_database cookbook.
+
+To boostrap a node, you need to run the command below. Note that the `ssh-user` is `ubuntu`, since our node uses the ubuntu user as the user responsible for performing an SSH connection. 
+
+```
+knife bootstrap <ip address of the node> --ssh-user ubuntu --sudo --identity-file <path to your private key> --node-name node1-ubuntu --run-list 'recipe[postgres_database]'
+```
+
+By running the above, all the definitions of your cookbook should be performed on the node.
