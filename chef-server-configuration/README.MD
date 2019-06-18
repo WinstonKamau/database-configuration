@@ -35,6 +35,19 @@ Once you have gotten the key, change the name of the file [account.json.example]
 You need to have a domain for which you will use to connect online to your chef infra server. To do this you need to purchase your domain from a Domain Registrar Company. You then need to map your domain to point to the IPV4 address that you reserved above. This will require you to use the Type A option for creating your record.
 The domain name you use here will be used as one of the environment variables for your next step.
 
+6. Generate an SSH key.
+
+Generate an SSH key to be used to boostrap our nodes. To do so we use the `ssh-keygen` package to create both our private and public keys locally.
+
+On your terminal run the command below and answer the questions asked while generating the key. We use the `-C` option to ensure that our ssh-keygen command does not have comments. We do not want a username to be commented on this key for now. This project was tested by using ssh keys that did not specify a passphrase.
+Ensure you remember where your keys are stored while generating them. 
+```
+ssh-keygen -C ""
+```
+![ssh-key-generation](docs/images/chef_node_ssh_key.png)
+
+The contents for the `*.pub` file in the image above are to be used as an environment variable, as this key will be added to the chef node server. The other file, *in this case chef_node* will be used as the private key to bootstrap to the chef node.
+
 
 ### Running Terraform scripts
 
