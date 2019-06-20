@@ -31,3 +31,12 @@ end
 package 'postgresql-10'
 # Install client libraries and binaries for postgresql version 10
 package 'postgresql-client-10'
+
+cookbook_file '/etc/postgresql/10/main/postgresql.conf' do
+  source 'postgresql.conf'
+  action :create
+end
+
+service 'postgresql' do
+  action :restart
+end
