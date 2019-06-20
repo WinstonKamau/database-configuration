@@ -53,6 +53,16 @@ cd postgres_database
 chef exec rspec
 ```
 
+### Provide the name of the storage bucket
+
+On the [postgresql.conf](postgres_database/files/postgresql.conf) file you need to edit the code below.
+
+```
+archive_command = 'export CLOUDSDK_PYTHON=/usr/bin/python && gsutil cp %p gs://{BUCKET_NAME}/prirmay-database-archive/%f'	
+```
+
+The `{BUCKET_NAME}` should be a private bucket on GCS which stores the archives for the master database.
+
 ### Bootstrap a node with the postgres_database cookbook.
 
 To boostrap a node, you need to run the command below. Note that the `ssh-user` is `ubuntu`, since our node uses the ubuntu user as the user responsible for performing an SSH connection. 
@@ -60,5 +70,6 @@ To boostrap a node, you need to run the command below. Note that the `ssh-user` 
 ```
 knife bootstrap <ip address of the node> --ssh-user ubuntu --sudo --identity-file <path to your private key> --node-name node1-ubuntu --run-list 'recipe[postgres_database]'
 ```
-
 By running the above, all the definitions of your cookbook should be performed on the node.
+
+In case you get an issue where you try to bootstrap and this command refuses, this could be because the host had been added to the known_hosts file previously. You may need to edit the known_hosts file and delete the line that contains your node's IP address and key.

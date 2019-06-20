@@ -26,7 +26,7 @@ resource "google_compute_instance" "chef-server-instance" {
   }
 }
 
-resource "google_compute_instance" "chef-node-instance" {
+resource "google_compute_instance" "primary-database-server" {
   project      = "${var.project}"
   zone         = "${var.chef_node_zone}"
   name         = "${var.chef_node_name}"
@@ -49,6 +49,10 @@ resource "google_compute_instance" "chef-node-instance" {
 
     metadata {
     chefNodePublicKey    = "${var.chef_node_public_ssh_key}"
+  }
+
+  service_account {
+    scopes = ["storage-full"]
   }
   
 }
