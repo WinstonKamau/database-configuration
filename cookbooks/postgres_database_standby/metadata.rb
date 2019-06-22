@@ -1,4 +1,4 @@
-name 'postgres_database'
+name 'postgres_database_standby'
 maintainer 'Crispus Kamau'
 maintainer_email 'winstonkamau77@gmail.com'
 license 'MIT'
