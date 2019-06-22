@@ -48,7 +48,7 @@ resource "google_compute_instance" "primary-database-server" {
   metadata_startup_script = "${file("install_chef_node.sh")}"
 
     metadata {
-    chefNodePublicKey    = "${var.chef_node_public_ssh_key}"
+    chefNodePublicKey    = "${file("chef_node_ssh_key.pub")}"
   }
 
   service_account {
@@ -79,7 +79,7 @@ resource "google_compute_instance" "standby-database-server" {
   metadata_startup_script = "${file("install_chef_node.sh")}"
 
     metadata {
-    chefNodePublicKey    = "${var.chef_node_public_ssh_key}"
+    chefNodePublicKey    = "${file("chef_node_ssh_key.pub")}"
   }
 
   service_account {
