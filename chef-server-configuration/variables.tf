@@ -37,9 +37,6 @@ variable "chef_node_zone" {
 
 }
 
-variable "chef_node_public_ssh_key" {
-  
-}
 
 variable "chef_node_zone_2" {
   

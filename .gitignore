@@ -71,3 +71,5 @@ account.json
 .terraform
 # node secrets
 terraform.tfvars
+chef_node_ssh_key
+chef_node_ssh_key.pub

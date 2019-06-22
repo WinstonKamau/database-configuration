@@ -37,17 +37,11 @@ The domain name you use here will be used as one of the environment variables fo
 
 6. Generate an SSH key.
 
-Generate an SSH key to be used to boostrap our nodes. To do so we use the `ssh-keygen` package to create both our private and public keys locally.
+Check into the chef-server-configuration directory and run the command below to generate ssh keys that will be used by chef to bootstrap your nodes.
 
-On your terminal run the command below and answer the questions asked while generating the key. We use the `-C` option to ensure that our ssh-keygen command does not have comments. We do not want a username to be commented on this key for now. This project was tested by using ssh keys that did not specify a passphrase.
-Ensure you remember where your keys are stored while generating them. 
 ```
-ssh-keygen -C ""
+bash create_ssh_key.sh
 ```
-![ssh-key-generation](docs/images/chef_node_ssh_key.png)
-
-The contents for the `*.pub` file in the image above are to be used as an environment variable, as this key will be added to the chef node server. The other file, *in this case chef_node* will be used as the private key to bootstrap to the chef node.
-
 
 ### Running Terraform scripts
 
