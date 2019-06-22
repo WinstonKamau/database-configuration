@@ -41,6 +41,7 @@ Once you have performed the [Configuring your workstation to connect to the Chef
 
 ```
 knife cookbook upload postgres_database
+knife cookbook upload postgres_database_standby
 ```
 You should get the success message: *Created postgres_database*
 

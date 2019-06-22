@@ -40,3 +40,15 @@ variable "chef_node_zone" {
 variable "chef_node_public_ssh_key" {
   
 }
+
+variable "chef_node_zone_2" {
+  
+}
+
+variable "chef_node_name_2" {
+  
+}
+
+variable "chef_node_ip_address_2" {
+  
+}
