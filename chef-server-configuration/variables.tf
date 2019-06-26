@@ -30,9 +30,6 @@ variable "chef_node_machine_type" {
     default="f1-micro"
 }
 
-variable "chef_node_name" {
-}
-
 variable "chef_node_zone" {
 
 }
@@ -41,11 +38,14 @@ variable "chef_node_zone" {
 variable "chef_node_zone_2" {
   
 }
-
-variable "chef_node_name_2" {
+variable "chef_node_zone_3" {
   
 }
 
 variable "chef_node_ip_address_2" {
+  
+}
+
+variable "chef_node_ip_address_3" {
   
 }
