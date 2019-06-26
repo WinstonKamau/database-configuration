@@ -64,13 +64,24 @@ archive_command = 'export CLOUDSDK_PYTHON=/usr/bin/python && gsutil cp %p gs://{
 
 The `{BUCKET_NAME}` should be a private bucket on GCS which stores the archives for the master database.
 
-### Bootstrap a node with the postgres_database cookbook.
+### Bootstrap the nodes with the cookbooks
 
-To boostrap a node, you need to run the command below. Note that the `ssh-user` is `ubuntu`, since our node uses the ubuntu user as the user responsible for performing an SSH connection. 
+The next step involves bootstrapping our nodes with the cookbooks that we just created. We start of by bootstrapping the master with the postgres_database cookbook. This cookbook is meant to run the postgres setup for a master database. We then bootstrap our slaves with the postgres_database_standby cookbook. The postgres_database_standby cookbook is meant to run the setup for a standby database. While boostrapping any of the nodes in our current setup, use the `ssh-user` as `ubuntu`. By default the ubuntu image we use on GCP to create our VM instances, already contains this user. Changing the version of the image may have some effect on the SSH creation scripts that we use on Terraform.
+
+To bootstrap the **master-database-server** run the command below:
 
 ```
-knife bootstrap <ip address of the node> --ssh-user ubuntu --sudo --identity-file ../chef-server-configuration/chef_node_ssh_key --node-name node1-ubuntu --run-list 'recipe[postgres_database]'
+knife bootstrap <ip address of the master node> --ssh-user ubuntu --sudo --identity-file ../chef-server-configuration/chef_node_ssh_key --node-name node1-ubuntu --run-list 'recipe[postgres_database]'
 ```
-By running the above, all the definitions of your cookbook should be performed on the node.
 
-In case you get an issue where you try to bootstrap and this command refuses, this could be because the host had been added to the known_hosts file previously. You may need to edit the known_hosts file and delete the line that contains your node's IP address and key.
+To bootstrap the **standby-database-server-1** run the command below:
+```
+knife bootstrap <ip address of the standby server node 1> --ssh-user ubuntu --sudo --identity-file ../chef-server-configuration chef_node_ssh_key --node-name node2-ubuntu --run-list 'recipe[postgres_database_standby]'
+```
+
+To bootstrap the **standby-database-server-2** run the command below:
+```
+knife bootstrap <ip address of the standby server node 2> --ssh-user ubuntu --sudo --identity-file ../chef-server-configuration/chef_node_ssh_key --node-name node3-ubuntu --run-list 'recipe[postgres_database_standby]'
+```
+
+In case you get an issue where you try to bootstrap and this command refuses, this could be because the host had been added to the known_hosts file previously. You may need to locate this file and edit it by deleting the line that contains your nodes' IP address and key.

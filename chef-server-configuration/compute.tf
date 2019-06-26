@@ -26,10 +26,10 @@ resource "google_compute_instance" "chef-server-instance" {
   }
 }
 
-resource "google_compute_instance" "primary-database-server" {
+resource "google_compute_instance" "master-database-server" {
   project      = "${var.project}"
   zone         = "${var.chef_node_zone}"
-  name         = "${var.chef_node_name}"
+  name         = "master-database-server"
   machine_type = "${var.chef_node_machine_type}"
   tags         = ["http-firewall", "https-firewall"]
 
@@ -57,10 +57,10 @@ resource "google_compute_instance" "primary-database-server" {
   
 }
 
-resource "google_compute_instance" "standby-database-server" {
+resource "google_compute_instance" "standby-database-server-1" {
   project      = "${var.project}"
   zone         = "${var.chef_node_zone_2}"
-  name         = "${var.chef_node_name_2}"
+  name         = "slave-database-server-1"
   machine_type = "${var.chef_node_machine_type}"
   tags         = ["http-firewall", "https-firewall"]
 
@@ -74,6 +74,37 @@ resource "google_compute_instance" "standby-database-server" {
     network = "default"
     access_config {
       nat_ip = "${var.chef_node_ip_address_2}"
+    }	
+  }
+  metadata_startup_script = "${file("install_chef_node.sh")}"
+
+    metadata {
+    chefNodePublicKey    = "${file("chef_node_ssh_key.pub")}"
+  }
+
+  service_account {
+    scopes = ["storage-full"]
+  }
+ 
+}
+
+resource "google_compute_instance" "standby-database-server-2" {
+  project      = "${var.project}"
+  zone         = "${var.chef_node_zone_3}"
+  name         = "slave-database-server-2"
+  machine_type = "${var.chef_node_machine_type}"
+  tags         = ["http-firewall", "https-firewall"]
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-1604-xenial-v20190306"
+    }
+  }
+
+  network_interface {
+    network = "default"
+    access_config {
+      nat_ip = "${var.chef_node_ip_address_3}"
     }	
   }
   metadata_startup_script = "${file("install_chef_node.sh")}"
