@@ -31,7 +31,7 @@ resource "google_compute_instance" "master-database-server" {
   zone         = "${var.chef_node_zone}"
   name         = "master-database-server"
   machine_type = "${var.chef_node_machine_type}"
-  tags         = ["http-firewall", "https-firewall"]
+  tags         = ["master-psql-firewall", "tcp-lb-firewall"]
 
   boot_disk {
     initialize_params {
@@ -62,7 +62,7 @@ resource "google_compute_instance" "standby-database-server-1" {
   zone         = "${var.chef_node_zone_2}"
   name         = "slave-database-server-1"
   machine_type = "${var.chef_node_machine_type}"
-  tags         = ["http-firewall", "https-firewall"]
+  tags         = ["tcp-lb-firewall"]
 
   boot_disk {
     initialize_params {
@@ -93,7 +93,7 @@ resource "google_compute_instance" "standby-database-server-2" {
   zone         = "${var.chef_node_zone_3}"
   name         = "slave-database-server-2"
   machine_type = "${var.chef_node_machine_type}"
-  tags         = ["http-firewall", "https-firewall"]
+  tags         = ["tcp-lb-firewall"]
 
   boot_disk {
     initialize_params {
