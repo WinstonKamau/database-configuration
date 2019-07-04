@@ -4,7 +4,7 @@ maintainer_email 'winstonkamau77@gmail.com'
 license 'MIT'
 description 'Installs/Configures postgres_database'
 long_description 'Installs/Configures postgres_database'
-version '0.2.0'
+version '0.2.1'
 chef_version '>= 13.0'
 supports 'ubuntu'
 
