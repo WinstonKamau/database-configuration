@@ -37,6 +37,16 @@ cookbook_file '/etc/postgresql/10/main/postgresql.conf' do
   action :create
 end
 
+cookbook_file '/etc/postgresql/10/main/pg_hba.conf' do
+  source 'pg_hba.conf'
+  action :create
+end
+
+execute 'create-database' do
+  command 'createdb -U postgres test-database'
+  only_if "psql -U postgres -c 'SELECT COUNT(*) FROM pg_database WHERE datname='test-database'' | grep 0"
+end
+
 service 'postgresql' do
   action :restart
 end
