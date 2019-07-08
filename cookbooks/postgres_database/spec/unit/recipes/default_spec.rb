@@ -15,6 +15,11 @@ describe 'postgres_database::default' do
       runner.converge(described_recipe)
     end
 
+    before do
+      stub_command("psql -U postgres -c \"SELECT COUNT(*) FROM pg_database WHERE datname = 'test-database';\" | grep 0").and_return(false)
+      stub_command("psql -U postgres -d test-database -c \"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'guestbook';\" | grep 0").and_return(false)
+    end
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
@@ -26,6 +31,11 @@ describe 'postgres_database::default' do
       # https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '7.4.1708')
       runner.converge(described_recipe)
+    end
+
+    before do
+      stub_command("psql -U postgres -c \"SELECT COUNT(*) FROM pg_database WHERE datname = 'test-database';\" | grep 0").and_return(false)
+      stub_command("psql -U postgres -d test-database -c \"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'guestbook';\" | grep 0").and_return(false)
     end
 
     it 'converges successfully' do
