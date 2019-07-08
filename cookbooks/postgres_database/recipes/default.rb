@@ -42,11 +42,20 @@ cookbook_file '/etc/postgresql/10/main/pg_hba.conf' do
   action :create
 end
 
-execute 'create-database' do
-  command 'createdb -U postgres test-database'
-  only_if "psql -U postgres -c 'SELECT COUNT(*) FROM pg_database WHERE datname='test-database'' | grep 0"
-end
-
 service 'postgresql' do
   action :restart
+end
+
+execute 'create-database' do
+  command 'createdb -U postgres test-database'
+  only_if "psql -U postgres -c \"SELECT COUNT(*) FROM pg_database WHERE datname = 'test-database';\" | grep 0"
+end
+
+execute 'create a table' do
+  command "psql -U postgres -d test-database -c 'CREATE TABLE guestbook (visitor_email text, vistor_id serial, date timestamp, message text);'"
+  only_if "psql -U postgres -d test-database -c \"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'guestbook';\" | grep 0"
+end
+
+execute 'add entry to table' do
+  command "psql -U postgres -d test-database -c \"INSERT INTO guestbook (visitor_email, date, message) VALUES ( 'jim@gmail.com', current_date, 'This is a test.');\""
 end

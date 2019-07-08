@@ -41,6 +41,7 @@ resource "google_compute_instance" "master-database-server" {
 
   network_interface {
     network = "default"
+    network_ip="10.138.0.16"
     access_config {
       nat_ip = "${var.chef_node_ip_address}"
     }	
