@@ -3,7 +3,7 @@ data "google_compute_zones" "available" {}
 resource "google_compute_instance" "chef-server-instance" {
   project      = "${var.project}"
   zone         = "${var.chef_server_zone}"
-  name         = "${var.chef_server_name}"
+  name         = "chef-infra-server"
   machine_type = "${var.machine_type}"
   tags         = ["http-firewall", "https-firewall"]
 

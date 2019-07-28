@@ -1,21 +1,30 @@
-## Deploying the Chef Server.
+## Deploying Our Infrastructure.
 
 To achieve a running chef server for our chef setup we need to setup our infrastructure on the cloud. For this setup, we will be using [Google Cloud Platform](https://cloud.google.com). Our chef server will require a virtual machine on Compute engine where it will be installed. We shall also expose it by providing it with an external IP Address. To make our process of deploying our chef server repeatable, less error prone and easy we need to automate this process. To automate it, we need a scripting language to enable us achieve infrastructure as code. To do this we choose **Terraform**. I value [terraform](https://www.terraform.io/) for its ease of use, its integration with many cloud environments, its high support; with new versions being released frequently, its quality of being free with good documentation.
 
 
-### Setting up Google Cloud Platform for Our Chef Server.
+### Setting up Google Cloud Platform for Our Infrastructure.
 
 1. Create a storage bucket
 
-First we need to start by creating a storage bucket. Terraform needs to store a file in this storage bucket, which it can use to continuously check in the current state and determine what the desired state will be, before building infrastructure on your platform. Instructions for creating a storage bucket can be found [here](https://cloud.google.com/storage/docs/creating-buckets). Once you are done take note of the name of the bucket that you just created as we shall use it later when running terraform commands.
+First we need to start by creating a storage bucket. Terraform needs to store a file in this storage bucket, which it can use to continuously check in the current state and determine what the desired state will be, before building infrastructure on your platform. Instructions for creating a storage bucket can be found [here](https://cloud.google.com/storage/docs/creating-buckets). Once you are done take note of the name of the bucket that you just created as we shall use it later when running terraform commands
 
-2. Reserve a static external IP address.
+2. Reserve fours static external IP address.
 
-Steps for reserving this can be found [here](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static). Note that when reserving an IP address, create it in a region where you would like to create your chef-server VM so that you may not have difficulty attaching it to an instance. This is as shown below, where the user intends to create the VM in the us-east1 region:
+Steps for reserving this can be found [here](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static). Note that when reserving any of the IP address, create it in a region where you would like to also create your VMs so that you may not have difficulty attaching it to an instance. This is as shown below, where the user intends to create the VM in the us-east1 region:
 ![IP address reservation Image](docs/images/regional-ip-address.png?raw=true)
 Most instances are regional and if given a regional IP address in a different region from their own an error is raised when creating the script.
 
-We need an external Static IP address through which we shall be able to access our chef server. The reason we choose an external Static IP address rather than an ephemeral IP address, is because we need something long-term that we are going to point our domain address to. Take note of the IP address you reserved as we shall also use it later.
+For our current setup here is a table for our instance names and the name of the zone variables that you need to provide their respective values.
+
+| Instance Name         | Zone Variable           |
+|-----------------------|-------------------------|
+|chef-infra-server      |   chef_server_zone      |
+|master-database-server |   chef_node_zone        |
+|slave-database-server-1|   chef_node_zone_2      |
+|slave-database-server-2|   chef_node_zone_3      |
+
+Specifically for the chef-infras-server instance, we need an external Static IP address through which we shall be able to access our chef server. The reason we choose an external Static IP address rather than an ephemeral IP address, is because we need something long-term that we are going to point our domain address to. Take note of the IP address you reserved as we shall also use it later.
 
 3. Enable APIs and services.
 
@@ -23,8 +32,6 @@ Instructions for enabling an API and Services can be found [here](https://cloud.
 Ensure that the Compute Engine API is enabled.
 
 4. Setup the service account 
-
-**Note:** *This service account is different from the one we created above for packer*.
 
 You may follow instructions on creating a service account as per this [link](https://cloud.google.com/iam/docs/creating-managing-service-accounts). The most critical part of the service account is the role that the account will be able to perform. Ensure that the service account has at lease admin capabilities of **Compute Admin**, **Compute Network Admin**, **Service Account User** and **Storage Object Admin**. Download the Service Account JSON key to your machine after giving the Service Account its roles.
 

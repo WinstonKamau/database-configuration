@@ -7,9 +7,7 @@ variable "project" {
 variable "chef_server_zone" {
   
 }
-variable "chef_server_name" {
-  
-}
+
 variable "chef_ip_address" {
   
 }
