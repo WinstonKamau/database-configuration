@@ -9,22 +9,20 @@ To achieve a running chef server for our chef setup we need to setup our infrast
 
 First we need to start by creating a storage bucket. Terraform needs to store a file in this storage bucket, which it can use to continuously check in the current state and determine what the desired state will be, before building infrastructure on your platform. Instructions for creating a storage bucket can be found [here](https://cloud.google.com/storage/docs/creating-buckets). Once you are done take note of the name of the bucket that you just created as we shall use it later when running terraform commands
 
-2. Reserve fours static external IP address.
+2. Reserve four static external IP addresses in their respective zones.
 
 Steps for reserving this can be found [here](https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static). Note that when reserving any of the IP address, create it in a region where you would like to also create your VMs so that you may not have difficulty attaching it to an instance. This is as shown below, where the user intends to create the VM in the us-east1 region:
 ![IP address reservation Image](docs/images/regional-ip-address.png?raw=true)
-Most instances are regional and if given a regional IP address in a different region from their own an error is raised when creating the script.
+Most instances are regional and if given a regional IP address in a different region from their own an error is raised when running the script.
 
-For our current setup here is a table for our instance names and the name of the zone variables that you need to provide their respective values.
+At this step, we need to make a decision for each of our four instances: chef infrastructure server, master database server and two slave databases servers. We need to determine each of their zones. By determining their zones we can then determine the regions where we will create the IP addresses on. Below is a table that list the relationship between the instances, its zone variable and IP address variable. These two variables are provided in the first step of  [Running Terraform scripts](#running-terraform-scripts)
 
-| Instance Name         | Zone Variable           |
-|-----------------------|-------------------------|
-|chef-infra-server      |   chef_server_zone      |
-|master-database-server |   chef_node_zone        |
-|slave-database-server-1|   chef_node_zone_2      |
-|slave-database-server-2|   chef_node_zone_3      |
-
-Specifically for the chef-infras-server instance, we need an external Static IP address through which we shall be able to access our chef server. The reason we choose an external Static IP address rather than an ephemeral IP address, is because we need something long-term that we are going to point our domain address to. Take note of the IP address you reserved as we shall also use it later.
+| Instance Name         | Zone Variable      | IP Address Variable  |
+|-----------------------|--------------------|----------------------|
+|chef-infra-server      |   chef_server_zone | chef_ip_address      |
+|master-database-server |   chef_node_zone   |chef_node_ip_address  |
+|slave-database-server-1|   chef_node_zone_2 |chef_node_ip_address_2|
+|slave-database-server-2|   chef_node_zone_3 |chef_node_ip_address_3|
 
 3. Enable APIs and services.
 
@@ -39,12 +37,12 @@ Once you have gotten the key, change the name of the file [account.json.example]
 
 5. Map a domain to your chef server
 
-You need to have a domain for which you will use to connect online to your chef infra server. To do this you need to purchase your domain from a Domain Registrar Company. You then need to map your domain to point to the IPV4 address that you reserved above. This will require you to use the Type A option for creating your record.
+You need to have a domain for which you will use to connect online to your chef infra server. To do this you need to purchase your domain from a Domain Registrar Company. You then need to map your domain to point to the IPV4 address that you reserved for the chef infra server in step 2 above. This will require you to use the Type A option for creating your record.
 The domain name you use here will be used as one of the environment variables for your next step.
 
 6. Generate an SSH key.
 
-Check into the chef-server-configuration directory and run the command below to generate ssh keys that will be used by chef to bootstrap your nodes.
+Change directory into the chef-server-configuration directory and run the command below to generate ssh keys that will be used by chef to bootstrap your nodes.
 
 ```
 bash create_ssh_key.sh
@@ -54,10 +52,10 @@ bash create_ssh_key.sh
 
 1. Pass environment variables
 
-Our deployment script requires some environment variables. Create a file called terraform.tfvars on the root of your repository. You can derive the structure of secrets needed using the [terrafrom.tfvars.example](terraform.tfvars.example) file on the root of your repository. Replace each of the secret with its respective value.
+Our deployment script requires some environment variables. Create a file called terraform.tfvars on the root of your repository. You can derive the structure of secrets needed using the [terrafrom.tfvars.example](terraform.tfvars.example) file on the root of your repository. Replace each of the secret with its respective value. Note that `hostname` was determined in Step 5 of [Setting up Google Cloud Platform for Our Infrastructure](#setting-up-google-cloud-platform-for-our-infrastructure) while `chef_server_zone`, `chef_ip_address`, `chef_node_zone`, `chef_node_ip_address`, `chef_node_zone_2`, `chef_node_ip_address_2` `chef_node_zone_3` and `chef_node_ip_address_3` were determined in Step 2.
 
 2. Initializing terraform. 
-First step involves initializing terraform. To perform this step you need to have the name of your storage bucket that you created on Step 1 of [Setting up Google Cloud Platform for deployment.](#setting-up-google-cloud-platform-for-deployment)
+First step involves initializing terraform. To perform this step you need to have the name of your storage bucket that you created on Step 1 of [Setting up Google Cloud Platform for Our Infrastructure](#setting-up-google-cloud-platform-for-our-infrastructure).
 
 Run the command below on the root of your repository:
 ```
