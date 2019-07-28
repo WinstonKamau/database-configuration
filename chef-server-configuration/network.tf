@@ -26,6 +26,20 @@ resource "google_compute_instance_group" "europe-west1-database" {
   }
 }
 
+resource "google_compute_instance_group" "master-database" {
+  name = "master-databases-instance-group"
+  zone = "us-west1-b"
+  instances = [ "${google_compute_instance.master-database-server.self_link}" ]
+  named_port {
+    name = "database-port"
+    port = "5432"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "google_compute_backend_service" "default" {
   name          = "database-load-balancer"
   protocol      = "TCP"
@@ -36,6 +50,9 @@ resource "google_compute_backend_service" "default" {
   }
   backend {
       group = "${google_compute_instance_group.europe-west1-database.self_link}"
+  }
+  backend {
+      group = "${google_compute_instance_group.master-database.self_link}"
   }
 
   health_checks = ["${google_compute_health_check.default.self_link}"]
