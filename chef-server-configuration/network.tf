@@ -1,5 +1,5 @@
-resource "google_compute_instance_group" "us-east1-database" {
-  name = "us-east1-databases-instance-group"
+resource "google_compute_instance_group" "slave-database-1" {
+  name = "slave-database-1"
   zone = "us-east1-b"
   instances = [ "${google_compute_instance.standby-database-server-1.self_link}" ]
   named_port {
@@ -12,8 +12,8 @@ resource "google_compute_instance_group" "us-east1-database" {
   }
 }
 
-resource "google_compute_instance_group" "europe-west1-database" {
-  name = "europe-west1-databases-instance-group"
+resource "google_compute_instance_group" "slave-database-2" {
+  name = "slave-database-2"
   zone = "europe-west1-b"
   instances = [ "${google_compute_instance.standby-database-server-2.self_link}" ]
   named_port {
@@ -27,7 +27,7 @@ resource "google_compute_instance_group" "europe-west1-database" {
 }
 
 resource "google_compute_instance_group" "master-database" {
-  name = "master-databases-instance-group"
+  name = "master-database"
   zone = "us-west1-b"
   instances = [ "${google_compute_instance.master-database-server.self_link}" ]
   named_port {
@@ -46,10 +46,10 @@ resource "google_compute_backend_service" "default" {
   port_name     = "database-port"
   timeout_sec   = 10
   backend { 
-      group = "${google_compute_instance_group.us-east1-database.self_link}"
+      group = "${google_compute_instance_group.slave-database-1.self_link}"
   }
   backend {
-      group = "${google_compute_instance_group.europe-west1-database.self_link}"
+      group = "${google_compute_instance_group.slave-database-2.self_link}"
   }
   backend {
       group = "${google_compute_instance_group.master-database.self_link}"
