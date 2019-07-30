@@ -1,6 +1,6 @@
 ### Configuring your workstation to connect to the Chef Server
 
-1. Before we start connecting our workstation to the Chef Server, the Chef server needs to be up and running. To achieve this follow the documentation [here](../chef-server-configuration/README.MD)
+1. Before we start connecting our workstation to the Chef Server, the Chef setup needs to be up and running. To achieve this follow the documentation [here](../chef-server-configuration/README.MD)
 
 2. Once you are done with step 1 you can change directory to the cookbooks directory and export the following environment variable on your terminal
 
@@ -64,9 +64,11 @@ archive_command = 'export CLOUDSDK_PYTHON=/usr/bin/python && gsutil cp %p gs://{
 
 The `{BUCKET_NAME}` should be a private bucket on GCS which stores the archives for the master database.
 
+Do the same for the [recovery.conf](postgres_database_standby/files/recovery.conf) file, giving the same bucket name.
+
 ### Bootstrap the nodes with the cookbooks
 
-The next step involves bootstrapping our nodes with the cookbooks that we just created. We start of by bootstrapping the master with the postgres_database cookbook. This cookbook is meant to run the postgres setup for a master database. We then bootstrap our slaves with the postgres_database_standby cookbook. The postgres_database_standby cookbook is meant to run the setup for a standby database. While boostrapping any of the nodes in our current setup, use the `ssh-user` as `ubuntu`. By default the ubuntu image we use on GCP to create our VM instances, already contains this user. Changing the version of the image may have some effect on the SSH creation scripts that we use on Terraform.
+The next step involves bootstrapping our nodes with the cookbooks that we just created. We start off by bootstrapping the master with the postgres_database cookbook. This cookbook is meant to run the postgres setup for a master database. We then bootstrap our slaves with the postgres_database_standby cookbook. The postgres_database_standby cookbook is meant to run the setup for a standby database. While boostrapping any of the nodes in our current setup, use the `ssh-user` as `ubuntu`. By default the ubuntu image we use on GCP to create our VM instances, already contains this user. Changing the version of the image may have some effect on the SSH creation scripts that we use on Terraform.
 
 To bootstrap the **master-database-server** run the command below:
 
