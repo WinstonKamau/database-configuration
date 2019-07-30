@@ -4,12 +4,12 @@ database-configuration is a repository that is meant to automate the creation of
 
 # Description
 
-The automation scripts above are separated into two:
+The automation scripts in this repository are separated into two:
 
 1. Configuration Management with Chef.
 The purpose of this step is to use chef scripts to configure our compute engine database nodes. Our Chef setup includes the following:
     - Chef Work Station: This work station exists locally on the computer where this repository has been cloned. In this work station, this is where you are able to make updates to the postgres_database and postgres_database_standby cookbooks. The cookbooks are located under the cookbooks directory. These cookbooks are used to easily allow change and configuration management on our database setup.
-    - Chef Infrastructure Server: This is a server where cookbooks are uploaded to. This server is where our database nodes are managed, by running a chef client on the nodes.The results of the runs are stored in this server so ensure that the data on each of the database nodes is kept up to date.
+    - Chef Infrastructure Server: This is a server where cookbooks are uploaded to. This server is where our database nodes are managed. A chef client will run the cookbooks on the chef insfrastructure server on the nodes. The results of the client runs are then stored on the infrastructure. For future runs, the chef client will check in on the chef infrastructure server to determine what new changes need to be updated based on previous runs made.
     - Chef Nodes: These are the compute engines where we setup our Master and Slave databases.
 
 2. Infrastructure Automation with Terraform.
