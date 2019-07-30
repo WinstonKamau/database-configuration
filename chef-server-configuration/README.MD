@@ -3,7 +3,9 @@
 To achieve our Chef setup we need to first setup infrastructure on the cloud. For this setup, we will be using [Google Cloud Platform](https://cloud.google.com). We shall setup the following:
 
 - A chef infrastructure server which will require a virtual machine on Compute engine where it will be installed. We shall also expose it by providing it with an external IP Address. 
-- Three Virtual Machines for which we shall install our PostgreSQL databases. Each shall also have its own external IP addresses.
+- Three Virtual Machines for which we shall install our PostgreSQL databases. Each VM shall also have its own external IP addresses.
+- A load balancer for directing database read traffic to the three databases
+- Three regional instance groups that are to be used by the load balancer to direct traffic to the respective databases.
 
 To make our process of deploying our chef setup repeatable, less error prone and easy we need to automate this process. To automate it, we need a scripting language to enable us achieve infrastructure as code. To do this I chose **Terraform**. I value [terraform](https://www.terraform.io/) for its ease of use, its integration with many cloud environments, its high support; with new versions being released frequently, its quality of being free with good documentation.
 
